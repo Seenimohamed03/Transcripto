@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 export type Transcript = {
   id: string;
@@ -9,11 +9,13 @@ export type Transcript = {
   createdAt: string;
 };
 
-const HISTORY_KEY = 'audioscribe_history';
+const HISTORY_KEY = "transcripto_history";
 
 export function useTranscriptionHistory() {
   const [transcripts, setTranscripts] = useState<Transcript[]>([]);
-  const [selectedTranscriptId, setSelectedTranscriptId] = useState<string | null>(null);
+  const [selectedTranscriptId, setSelectedTranscriptId] = useState<
+    string | null
+  >(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -29,49 +31,65 @@ export function useTranscriptionHistory() {
     }
   }, []);
 
-  const saveTranscript = useCallback((transcript: Omit<Transcript, 'createdAt'> & { id?: string }) => {
-    let newTranscripts;
-    const now = new Date().toISOString();
+  const saveTranscript = useCallback(
+    (transcript: Omit<Transcript, "createdAt"> & { id?: string }) => {
+      let newTranscripts;
+      const now = new Date().toISOString();
 
-    const existingIndex = transcripts.findIndex(t => t.id === transcript.id);
-
-    if (transcript.id && existingIndex > -1) {
-      newTranscripts = transcripts.map(t =>
-        t.id === transcript.id ? { ...t, ...transcript, text: transcript.text, title: transcript.title } : t
+      const existingIndex = transcripts.findIndex(
+        (t) => t.id === transcript.id
       );
-    } else {
-      const newId = `transcript_${Date.now()}`;
-      const newTranscript = {
-        ...transcript,
-        id: newId,
-        createdAt: now,
-      };
-      newTranscripts = [newTranscript, ...transcripts];
-      setSelectedTranscriptId(newId);
-    }
-    
-    try {
-      localStorage.setItem(HISTORY_KEY, JSON.stringify(newTranscripts));
-      setTranscripts(newTranscripts);
-    } catch (error) {
-      console.error("Failed to save transcript:", error);
-    }
-  }, [transcripts]);
 
-  const deleteTranscript = useCallback((id: string) => {
-    const newTranscripts = transcripts.filter(t => t.id !== id);
-    try {
-      localStorage.setItem(HISTORY_KEY, JSON.stringify(newTranscripts));
-      setTranscripts(newTranscripts);
-      if (selectedTranscriptId === id) {
-        setSelectedTranscriptId(null);
+      if (transcript.id && existingIndex > -1) {
+        newTranscripts = transcripts.map((t) =>
+          t.id === transcript.id
+            ? {
+                ...t,
+                ...transcript,
+                text: transcript.text,
+                title: transcript.title,
+              }
+            : t
+        );
+      } else {
+        const newId = `transcript_${Date.now()}`;
+        const newTranscript = {
+          ...transcript,
+          id: newId,
+          createdAt: now,
+        };
+        newTranscripts = [newTranscript, ...transcripts];
+        setSelectedTranscriptId(newId);
       }
-    } catch (error) {
-      console.error("Failed to delete transcript:", error);
-    }
-  }, [transcripts, selectedTranscriptId]);
 
-  const selectedTranscript = transcripts.find(t => t.id === selectedTranscriptId) || null;
+      try {
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(newTranscripts));
+        setTranscripts(newTranscripts);
+      } catch (error) {
+        console.error("Failed to save transcript:", error);
+      }
+    },
+    [transcripts]
+  );
+
+  const deleteTranscript = useCallback(
+    (id: string) => {
+      const newTranscripts = transcripts.filter((t) => t.id !== id);
+      try {
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(newTranscripts));
+        setTranscripts(newTranscripts);
+        if (selectedTranscriptId === id) {
+          setSelectedTranscriptId(null);
+        }
+      } catch (error) {
+        console.error("Failed to delete transcript:", error);
+      }
+    },
+    [transcripts, selectedTranscriptId]
+  );
+
+  const selectedTranscript =
+    transcripts.find((t) => t.id === selectedTranscriptId) || null;
 
   return {
     transcripts,

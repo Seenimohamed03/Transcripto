@@ -1,13 +1,18 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { SidebarProvider, Sidebar, SidebarInset, SidebarContent } from "@/components/ui/sidebar";
+import React from "react";
+import Image from "next/image";
+import {
+  SidebarProvider,
+  Sidebar,
+  SidebarInset,
+  SidebarContent,
+} from "@/components/ui/sidebar";
 import HistorySidebar from "@/components/transcription/history-sidebar";
 import TranscriptionView from "@/components/transcription/transcription-view";
 import { Button } from "@/components/ui/button";
-import { FileAudio } from 'lucide-react';
-import { useTranscriptionHistory } from '@/contexts/transcription-history-context';
-import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
+import { useTranscriptionHistory } from "@/contexts/transcription-history-context";
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 
 export default function AppLayout() {
   const { setSelectedTranscriptId } = useTranscriptionHistory();
@@ -21,7 +26,20 @@ export default function AppLayout() {
               <Sheet>
                 <SheetTrigger asChild>
                   <Button variant="outline" size="icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-6 w-6"
+                    >
+                      <path d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
                     <span className="sr-only">Toggle history sidebar</span>
                   </Button>
                 </SheetTrigger>
@@ -30,11 +48,19 @@ export default function AppLayout() {
                 </SheetContent>
               </Sheet>
             </div>
-            <FileAudio className="h-8 w-8 text-primary" />
-            <h1 className="text-2xl font-bold font-headline">AudioScribe</h1>
+            <Image
+              src="/logo.png"
+              alt="Transcripto Logo"
+              width={32}
+              height={32}
+              className="h-8 w-8"
+            />
+            <h1 className="text-2xl font-bold font-headline">Transcripto</h1>
           </div>
           <div className="flex items-center gap-2">
-            <Button onClick={() => setSelectedTranscriptId(null)}>New Transcription</Button>
+            <Button onClick={() => setSelectedTranscriptId(null)}>
+              New Transcription
+            </Button>
           </div>
         </header>
 

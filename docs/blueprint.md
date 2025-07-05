@@ -1,4 +1,4 @@
-# **App Name**: AudioScribe
+# **App Name**: Transcripto
 
 ## Core Features:
 
